@@ -1,0 +1,2 @@
+CREATE DATABASE geonetwork;
+GRANT ALL PRIVILEGES ON DATABASE geonetwork TO admin;

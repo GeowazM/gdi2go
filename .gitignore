@@ -1,0 +1,20 @@
+# Docker Volumes
+db_data_gis/
+geoserver_data/
+ilias_data/
+postgres_data/
+mysql_data/
+volumes/
+
+# Systemdateien
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Große Geodaten ignorieren
+raw_data/
+*.tif
+*.tiff
+*.ecw

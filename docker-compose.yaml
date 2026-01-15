@@ -1,0 +1,147 @@
+services:
+  # -------------------------------------------------------
+  # 1. GIS-Datenbank
+  # -------------------------------------------------------
+  gis_db:
+    image: postgis/postgis:15-3.4   # anscheinend nicht mit geonetwork 4 kompatibel: postgis/postgis:17-3.5
+    container_name: gis_db
+    restart: always
+    environment:
+      POSTGRES_DB: gis_data
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: sicherheitspasswort123
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data_gis:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # WICHTIG: Das hier lädt das Skript, um die DB "geonetwork" zu erstellen
+    networks:
+      - gis-net
+
+  # -------------------------------------------------------
+  # 2. pgAdmin
+  # -------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - gis_db
+    networks:
+      - gis-net
+
+  # -------------------------------------------------------
+  # 3. GeoServer
+  # -------------------------------------------------------
+  geoserver:
+    image: kartoza/geoserver:2.28.0
+    container_name: gis_geoserver
+    restart: always
+    environment:
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+      - GEOSERVER_ADMIN_USER=admin
+      - INITIAL_MEMORY=2G
+      - MAXIMUM_MEMORY=4G
+      - DB_BACKEND=POSTGRES
+      - HOST=gis_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=gis_data
+      - POSTGRES_USER=admin
+      - POSTGRES_PASS=sicherheitspasswort123
+    ports:
+      - "8080:8080"
+    volumes:
+      - geoserver_data:/opt/geoserver/data_dir
+    depends_on:
+      - gis_db
+    networks:
+      - gis-net
+
+  # -------------------------------------------------------
+  # 4. MapProxy
+  # -------------------------------------------------------
+  mapproxy:
+    image: yagajs/mapproxy
+    container_name: gis_mapproxy
+    restart: always
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./mapproxy:/mapproxy
+    depends_on:
+      - geoserver
+    networks:
+      - gis-net
+
+  # -------------------------------------------------------
+  # 5. Elasticsearch
+  # -------------------------------------------------------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: gis_elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - network.host=0.0.0.0
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - gis-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -f http://localhost:9200/_cat/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  # -------------------------------------------------------
+  # 6. GeoNetwork (Metadaten)
+  # -------------------------------------------------------
+  geonetwork:
+    image: geonetwork:4.4
+    container_name: gis_geonetwork
+    restart: always
+    environment:
+      DATA_DIR: /var/lib/geonetwork_data
+      # Datenbank Konfiguration
+      GN_DB_HOST: gis_db
+      GN_DB_PORT: 5432
+      GN_DB_USER: admin
+      GN_DB_PASSWORD: sicherheitspasswort123
+      GN_DB_NAME: geonetwork
+      
+      # WICHTIG: Hier die korrigierte Syntax für Elasticsearch
+      ES_HOST: gis_elasticsearch
+      ES_PORT: 9200
+      ES_PROTOCOL: http
+      
+      # Wir zwingen Java dazu, diese Werte zu nutzen (doppelt hält besser)
+      JAVA_OPTS: "-Des.host=gis_elasticsearch -Des.port=9200 -Des.protocol=http"
+      
+    ports:
+      - "8086:8080"
+    volumes:
+      - geonetwork_data:/var/lib/geonetwork_data
+    depends_on:
+      gis_db:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - gis-net
+
+volumes:
+  db_data_gis:
+  geoserver_data:
+  geonetwork_data:
+  es_data:
+
+networks:
+  gis-net:
+    driver: bridge

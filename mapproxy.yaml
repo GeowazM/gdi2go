@@ -1,0 +1,33 @@
+services:
+  demo:
+  tms:
+    use_grid_names: true
+  wms:
+    md:
+      title: MapProxy WMS Proxy
+      abstract: Beschleunigter Zugriff auf GeoServer
+
+layers:
+  - name: geoserver_cache_layer
+    title: Caching Layer für GeoServer
+    sources: [geoserver_cache]
+
+caches:
+  geoserver_cache:
+    grids: [webmercator]
+    sources: [geoserver_source]
+
+sources:
+  geoserver_source:
+    type: wms
+    req:
+      # Hier nutzen wir den internen Docker-Namen des GeoServers!
+      url: http://gis_geoserver:8080/geoserver/wms
+      transparent: true
+    coverage:
+      bbox: [-180, -90, 180, 90]
+      srs: 'EPSG:4326'
+
+grids:
+  webmercator:
+    base: GLOBAL_WEBMERCATOR
