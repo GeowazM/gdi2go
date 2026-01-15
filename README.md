@@ -1,6 +1,6 @@
 # 🌍 gdi2go - Geodateninfrastruktur im Container
 
-Ein portables, vollständig containerisiertes GIS-Labor basierend auf Docker. Dieses Repository startet einen kompletten Tech-Stack bestehend aus Datenbank, GIS-Servern und Management-Tools mit einem einzigen Befehl.
+Ein portables, containerisierte **open source Geodateninfrastruktur (GDI)** basierend auf Docker. Dieses Repository bietet über einen `Docker stack` eine Software Architektur für Geodaten bestehend aus einer räumlicher Datenbank, einem räumlichen Servern und Management-Tools mit einem Befehl.
 
 ## 🚀 Quick Start
 
