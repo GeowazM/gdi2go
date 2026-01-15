@@ -18,7 +18,7 @@ cd gdi2go
 docker compose up -d
 ```
 
-(Bitte warte beim ersten Start ca. 30-60 Sekunden, bis die Datenbank vollständig initialisiert ist.)
+(Beim ersten Start ca. 2-3 Minuten warten. Bis die Datenbank vollständig initialisiert ist.)
 
 #### Status prüfen
 ```bash
@@ -30,11 +30,11 @@ Hier sind alle Dienste aufgelistet, die gestartet werden.
 
 | Dienst | URL / Zugang | Port (Extern) | Benutzer | Passwort | Beschreibung |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **PostGIS - Datenbank** | `localhost` | `5433` ⚠️ | `admin` | `sicherheitspasswort123` | [PostgreSQL + PostGIS 15 3.4](https://postgis.net/) |
-| **pgAdmin 4 - DBMS** | [http://localhost:5050](http://localhost:5050) | `5050` | `admin@admin.com` | `admin` | [Datenbankmanagementsystem](https://www.pgadmin.org/) |
-| **GeoServer - WMS/WFS** | [http://localhost:8080/geoserver](http://localhost:8080/geoserver) | `8080` | `admin` | `geoserver` | [OGC-konforme Dienste bereitsellen](https://geoserver.org/) |
-| **MapProxy - Caches** | [http://localhost:8085](http://localhost:8085) | - | - | - | [Geospatial caches](https://mapproxy.org/) |
-| **Geonetwork MIS** | [http://localhost:8086/](http://localhost:8086/) | `8086` | `admin` | `admin` | [Geonetwork (4.4) - Metadateninformationssystem](https://www.geonetwork-opensource.org/) |
+| **PostGIS** *Datenbank* | `localhost` | `5433` ⚠️ | `admin` | `sicherheitspasswort123` | [PostgreSQL + PostGIS 15 3.4](https://postgis.net/) |
+| **pgAdmin** *DBMS* | [http://localhost:5050](http://localhost:5050) | `5050` | `admin@admin.com` | `admin` | [Datenbankmanagementsystem](https://www.pgadmin.org/) |
+| **GeoServer** *WMS/WFS* | [http://localhost:8080/geoserver](http://localhost:8080/geoserver) | `8080` | `admin` | `geoserver` | [OGC-konforme Dienste bereitsellen](https://geoserver.org/) |
+| **MapProxy** - *Caches* | [http://localhost:8085](http://localhost:8085) | - | - | - | [Geospatial caches](https://mapproxy.org/) |
+| **Geonetwork** *MIS* | [http://localhost:8086/](http://localhost:8086/) | `8086` | `admin` | `admin` | [Geonetwork (4.4) - Metadateninformationssystem](https://www.geonetwork-opensource.org/) |
 
 Für mehr Details siehe unten .yaml Datei im gdi2go repo.
 ⚠️ Wichtiger Hinweis zum Datenbank-Port:Um Konflikte mit lokalen PostgreSQL-Installationen zu vermeiden, ist die Datenbank extern auf Port 5433 gemappt (intern läuft sie auf 5432).
