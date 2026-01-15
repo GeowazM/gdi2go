@@ -37,11 +37,11 @@ Hier sind alle Dienste aufgelistet, die gestartet werden.
 | **Geonetwork** *MIS* | [http://localhost:8086/](http://localhost:8086/) | `8086` | `admin` | `admin` | [Geonetwork (4.4) - Metadateninformationssystem](https://www.geonetwork-opensource.org/) |
 
 Für mehr Details siehe unten .yaml Datei im gdi2go repo.
-⚠️ Wichtiger Hinweis zum Datenbank-Port:Um Konflikte mit lokalen PostgreSQL-Installationen zu vermeiden, ist die Datenbank extern auf Port 5433 gemappt (intern läuft sie auf 5432).
+⚠️ Wichtiger Hinweis zum Datenbank-Port: Um Konflikte mit lokalen PostgreSQL-Installationen zu vermeiden, ist die Datenbank extern auf Port 5433 geleitet (intern läuft sie auf 5432).
 
 ## 🔌Verbindung mit QGIS Desktop
 
-Um dich von deinem lokalen QGIS (außerhalb von Docker) mit der Datenbank zu verbinden, nutze folgende Einstellungen:
+Um dein lokalen QGIS Desktop (außerhalb von Docker) mit der PostGIS-Datenbank zu verbinden, nutze folgende Einstellungen:
 - Host: localhost
 - Port: 5433 (wichtig)
 - Datenbank: gis_data
@@ -49,22 +49,25 @@ Um dich von deinem lokalen QGIS (außerhalb von Docker) mit der Datenbank zu ver
 - Passwort: sicherheitspasswort123
 - SSL Mode: disable (oder allow)
 
-## 🛠️ Einrichtung & Tipps: pgAdmin Server hinzufügen
+## 🛠️ pgAdmin: Einen Server hinzufügen
 Nach dem Login in pgAdmin (Port 5050, admin) muss der Server einmalig registriert werden, da pgAdmin im Container läuft:
 - Rechtsklick auf "Servers" -> Register -> Server
-- Tab General: Name frei wählbar (z.B. "Docker DB")
-- Tab Connection:Host name: gis_db (⚠️ Hier NICHT localhost verwenden, da wir im Docker-Netzwerk sind!)
-- Port: 5432Username: admin
+- General: Name frei wählbar (z.B. "Docker DB")
+
+Connection: 
+- Host name: gis_db (⚠️ nicht localhost verwenden, da innerhalb vom Docker-Netzwerk)
+- Port: 5432
+- Username: admin
 - Password: sicherheitspasswort123
-- Troubleshooting: Datenbank-Login fehlgeschlagen?
 
-Falls Authentifizierungsfehler auftreten ("password authentication failed"), wurde das Datenbank-Volume eventuell mit alten Daten oder einem alten Passwort erstellt.Lösung (Hard Reset):
+⚠️Falls Authentifizierungsfehler auftreten ("password authentication failed"), wurde das Datenbank-Volume ggf. mit alten Daten oder einem alten Passwort erstellt. Potenzielle Lösung (Hard Reset):
 Dies löscht die Datenbank und setzt sie mit dem Passwort aus der YAML neu auf.
-⚠️ Achtung: Löscht alle gespeicherten Geodaten in der DB! 📂 
-```bash
-Bashdocker compose down -v
-```
 
+```bash
+docker compose down -v
+```
+⚠️ Achtung: Löscht alle gespeicherten Geodaten in der Datenbank!
+Danach erneut starten mit:
 ```bash
 docker compose up -d
 ```
