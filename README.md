@@ -12,7 +12,8 @@ git clone https://github.com/GeowazM/gdi2go.git
 cd gdi2go
 ```
    
-   ## Stack starten
+## Stack starten
+Im Ordner database_init gibt es eine gezippte SQL-Datenbank. Hier sind einige Beispieldaten enthalten, die zu Trainingszwecken in pgAdmin4 und dem Geoserver genutzt werden können. Entpacke diese und führe anschließend im Terminal folgenden Befehl aus:
 
 ```bash
 docker compose up -d
@@ -45,19 +46,19 @@ Um dein lokalen QGIS Desktop (außerhalb von Docker) mit der PostGIS-Datenbank z
 - Host: localhost
 - Port: 5433 (wichtig)
 - Datenbank: gis_data
-- Benutzername: admin
+- Benutzername: postgres
 - Passwort: sicherheitspasswort123
 - SSL Mode: disable (oder allow)
 
 ## 🛠️ pgAdmin: Einen Server hinzufügen
-Nach dem Login in pgAdmin (Port 5050, admin) muss der Server einmalig registriert werden, da pgAdmin im Container läuft:
+Nach dem Login in pgAdmin (Port 5050) muss der Server einmalig registriert werden, da pgAdmin im Container läuft:
 - Rechtsklick auf "Servers" -> Register -> Server
 - General: Name frei wählbar (z.B. "Docker DB")
 
 Connection: 
 - Host name: gis_db (⚠️ nicht localhost verwenden, da innerhalb vom Docker-Netzwerk)
 - Port: 5432
-- Username: admin
+- Username: postgres
 - Password: sicherheitspasswort123
 
 ⚠️Falls Authentifizierungsfehler auftreten ("password authentication failed"), wurde das Datenbank-Volume ggf. mit alten Daten oder einem alten Passwort erstellt. Potenzielle Lösung (Hard Reset):

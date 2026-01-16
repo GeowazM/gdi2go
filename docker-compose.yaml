@@ -3,18 +3,18 @@ services:
   # 1. GIS-Datenbank
   # -------------------------------------------------------
   gis_db:
-    image: postgis/postgis:15-3.4   # anscheinend nicht mit geonetwork 4 kompatibel: postgis/postgis:17-3.5
+    image: postgis/postgis:15-3.4   # postgis/postgis:17-3.5 ist anscheinend nicht mit geonetwork 4 kompatibel, deshalb 15: 
     container_name: gis_db
     restart: always
     environment:
       POSTGRES_DB: gis_data
-      POSTGRES_USER: admin
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: sicherheitspasswort123
     ports:
       - "5433:5432"
     volumes:
       - db_data_gis:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # WICHTIG: Das hier lädt das Skript, um die DB "geonetwork" zu erstellen
+      - ./database_init:/docker-entrypoint-initdb.d # Lädt ALLE .sql Dateien aus dem Ordner ./database_init alphabetisch
     networks:
       - gis-net
 
@@ -51,7 +51,7 @@ services:
       - HOST=gis_db
       - POSTGRES_PORT=5432
       - POSTGRES_DB=gis_data
-      - POSTGRES_USER=admin
+      - POSTGRES_USER=postgres
       - POSTGRES_PASS=sicherheitspasswort123
     ports:
       - "8080:8080"
@@ -112,7 +112,7 @@ services:
       # Datenbank Konfiguration
       GN_DB_HOST: gis_db
       GN_DB_PORT: 5432
-      GN_DB_USER: admin
+      GN_DB_USER: postgres
       GN_DB_PASSWORD: sicherheitspasswort123
       GN_DB_NAME: geonetwork
       
@@ -121,7 +121,7 @@ services:
       ES_PORT: 9200
       ES_PROTOCOL: http
       
-      # Wir zwingen Java dazu, diese Werte zu nutzen (doppelt hält besser)
+      # Wir zwingen Java dazu, diese Werte zu nutzen
       JAVA_OPTS: "-Des.host=gis_elasticsearch -Des.port=9200 -Des.protocol=http"
       
     ports:
