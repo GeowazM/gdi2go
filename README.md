@@ -61,6 +61,28 @@ Connection:
 - Username: postgres
 - Password: sicherheitspasswort123
 
+## GeoServer: Eine Verbindung zur Geodatenbank herstellen
+Nach dem Login (name: admin, pw: geoserver) in GeoServer (Port 8080/geoserver) erstelle einen Arbeitsbereich mit einem Namen (bspw. TestBereich).
+Unter Datenspeicher (Stores) -> Datenspeicher hinzufügen (Add new Store) ->  PostGIS - PostGIS Database | lässt sich eeine neue Datenbankverbindung herstellen.
+
+| Feld | Wert | Erklärung |
+| :--- | :--- | :--- |
+| **Host** | `gis_db` | Service-Name aus der docker-compose.yaml |
+| **Port** | `5432` | Der interne Container-Port |
+| **Database** | `gis_data` | Name der Datenbank (POSTGRES_DB) |
+| **Schema** | `public` | Standard-Schema |
+| **User** | `postgres` | Datenbank-Benutzer |
+| **Password** | `sicherheitspasswort123` | Datenbank-Passwort |
+
+### GeoServer gibt SCRAM-Fehler zurück
+Sie bedeutet, dass Host (gis_db) und Port (5432) korrekt sind, da der Server (die Datenbank) antwortet.
+Der Fehler ```The server requested SCRAM-based authentication, but no password was provided besagt```, dass Postgres (Version 15 nutzt standardmäßig die moderne SCRAM-Verschlüsselung) auf das Passwort wartet, aber der GeoServer keines oder ein leeres Passwort sendet. Der GeoServer hat eine Eigenheit: Wenn man die Verbindungsdaten bearbeitet und speichert, wird das Passwortfeld aus Sicherheitsgründen oft wieder geleert (es stehen zwar Punkte drin, aber es wird nicht immer gesendet).
+
+Lösung:
+
+Gehe im GeoServer zurück in den Dialog für die Datastore-Verbindung > Lösche den Inhalt des Feldes Password > Tippe das Passwort ```sicherheitspasswort123``` erneut explizit ein. Scrolle ganz nach unten und klicke auf Speichern.
+
+
 ⚠️Falls Authentifizierungsfehler auftreten ("password authentication failed"), wurde das Datenbank-Volume ggf. mit alten Daten oder einem alten Passwort erstellt. Potenzielle Lösung (Hard Reset):
 Dies löscht die Datenbank und setzt sie mit dem Passwort aus der YAML neu auf.
 
