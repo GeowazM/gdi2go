@@ -32,7 +32,7 @@ Hier sind alle Dienste aufgelistet, die gestartet werden.
 
 | Dienst | URL / Zugang | Port (Extern) | Benutzer | Passwort | Beschreibung |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **PostGIS** *Datenbank* | `localhost` | `5433` ⚠️ | `admin` | `sicherheitspasswort123` | [PostgreSQL + PostGIS 15 3.4](https://postgis.net/) |
+| **PostGIS** *Datenbank* | `localhost` | `5433` ⚠️ | `postgres` | `sicherheitspasswort123` | [PostgreSQL + PostGIS 15 3.4](https://postgis.net/) |
 | **pgAdmin** *DBMS* | [http://localhost:5050](http://localhost:5050) | `5050` | `admin@admin.com` | `admin` | [Datenbankmanagementsystem](https://www.pgadmin.org/) |
 | **GeoServer** *WMS/WFS* | [http://localhost:8080/geoserver](http://localhost:8080/geoserver) | `8080` | `admin` | `geoserver` | [OGC-konforme Dienste bereitsellen](https://geoserver.org/) |
 | **MapProxy** - *Caches* | [http://localhost:8085](http://localhost:8085) | - | - | - | [Geospatial caches](https://mapproxy.org/) |
