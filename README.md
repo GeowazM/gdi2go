@@ -7,12 +7,16 @@ Ein portables, containerisierte **open source Geodateninfrastruktur (GDI)** basi
 Voraussetzung: [Docker Desktop](https://www.docker.com/products/docker-desktop/) und [Git](https://git-scm.com/install/windows) sind installiert.
 
 ## 1.1 Repository **klonen**
+Über die Windows-Taste können wir nach *Eingabeaufforderung* suchen und so das Terminal öffnen. Hier können wir das Projekt *gdi2go* in einen Ordner ablegen, den wir ansteuern. Dies tun wir bspw. mit *cd C:\Users\GDM\Documents\gdi_box\gdi2go*. Passe den Pfad nach *cd* individuell an deinen Speicerort an. Im Anschluss können wir mit dem Befehl *git clone* und dem Verweis auf dieses Repository, dass Projekt auf uns lokal speichern.
 ```bash
 git clone https://github.com/GeowazM/gdi2go.git
+```
+Dann navigieren wir in der Kommandozeile mit cd in den geklonten Ordner.
+```bash
 cd gdi2go
 ```
    
-## 1.2 Stack starten
+## 1.2 Installation der Software-Architektur starten
 Im Ordner ```database_init``` gibt es eine gezippte SQL-Datenbank. Hier sind Beispieldaten enthalten, die zu Trainingszwecken in *pgAdmin4* und dem *Geoserver* genutzt werden können. Entpacke diese und führe anschließend im Terminal folgenden Befehl aus:
 
 ```bash
@@ -49,7 +53,9 @@ Wir werden zuerst einen Blick in die *PostGIS*-Datenbank werfen. Dort befindet s
 ## 2.1 pgAdmin: Einen Server hinzufügen 🐘
 Nach dem Login in pgAdmin (Port 5050) muss der Server einmalig registriert werden, da pgAdmin im Container läuft:
 - Rechtsklick auf "Servers" -> Register -> Server
-- General: Name frei wählbar (z.B. "Docker DB")
+Hier gibt es zwei für uns wichtige Reiter: General & Connection:
+General:
+- Name frei wählbar (z.B. "GDI-DB")
 
 Connection: 
 - Host name: gis_db (⚠️ nicht localhost verwenden, da innerhalb vom Docker-Netzwerk)
@@ -60,6 +66,7 @@ Connection:
 ## 2.2 GeoServer: Eine Verbindung zur Geodatenbank herstellen ⚙
 Nach dem Login (name: admin, pw: geoserver) in GeoServer (Port 8080/geoserver) erstelle einen Arbeitsbereich mit einem Namen (bspw. TestBereich).
 Unter Datenspeicher (Stores) -> Datenspeicher hinzufügen (Add new Store) ->  PostGIS - PostGIS Database | lässt sich eeine neue Datenbankverbindung herstellen.
+Der Name der Datenbank ist frei wählbar.
 
 | Feld | Wert | Erklärung |
 | :--- | :--- | :--- |
