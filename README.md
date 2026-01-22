@@ -17,7 +17,7 @@ cd gdi2go
 ```
    
 ## 1.2 Installation der Software-Architektur starten
-Im Ordner ```database_init``` gibt es eine gezippte SQL-Datenbank. Hier sind Beispieldaten enthalten, die zu Trainingszwecken in *pgAdmin4* und dem *Geoserver* genutzt werden können. Entpacke diese und führe anschließend im Terminal folgenden Befehl aus:
+Im Ordner ```database_init``` gibt es eine SQL-Datenbank. Hier sind Beispieldaten enthalten, die zu Trainingszwecken in *pgAdmin4* und dem *Geoserver* genutzt werden können. Entpacke diese und führe anschließend im Terminal folgenden Befehl aus:
 
 ```bash
 docker compose up -d
