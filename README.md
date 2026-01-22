@@ -4,7 +4,7 @@ Ein portables, containerisierte **open source Geodateninfrastruktur (GDI)** basi
 
 # 1. Quick Start 🚀
 
-Voraussetzung: [Docker Desktop](https://www.docker.com/products/docker-desktop/) und Git sind installiert.
+Voraussetzung: [Docker Desktop](https://www.docker.com/products/docker-desktop/) und [Git](https://git-scm.com/install/windows) sind installiert.
 
 ## 1.1 Repository **klonen**
 ```bash
